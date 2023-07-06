@@ -27,12 +27,9 @@ class _BooksState extends State<Books> {
   List<Book> _books = [];
 
   Future<void> displayData() async {
-    print('displayAll');
-    print('onRefresh works');
     DatabaseHelper dbHelper = DatabaseHelper.instance;
 
     List<Book> allBooks = await dbHelper.readAllBook();
-    print(allBooks);
 
     setState(() {
       _books = allBooks;

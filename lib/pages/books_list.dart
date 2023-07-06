@@ -4,7 +4,7 @@ import 'package:booku/book_item.dart';
 import 'add_book.dart';
 
 class BooksList extends StatefulWidget {
-  BooksList({
+  const BooksList({
     super.key,
     required this.books,
     required this.onAddbook,

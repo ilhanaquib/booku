@@ -9,7 +9,7 @@ void main() {
       theme: ThemeData().copyWith(
         useMaterial3: true,
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(214, 106, 247, 247)),
+            ColorScheme.fromSeed(seedColor: const Color.fromARGB(214, 106, 247, 247)),
         textTheme: GoogleFonts.poppinsTextTheme()
       ),
       home: const Books(),

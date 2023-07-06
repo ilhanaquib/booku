@@ -27,8 +27,8 @@ class DatabaseHelper {
 
   //create table
   Future _createDB(Database db, int version) async {
-    final idType = 'TEXT PRIMARY KEY';
-    final textType = 'TEXT NOT NULL';
+    const idType = 'TEXT PRIMARY KEY';
+    const textType = 'TEXT NOT NULL';
 
     await db.execute('''
     CREATE TABLE $tableBook (

@@ -32,18 +32,15 @@ class _AddBookState extends State<AddBook> {
   }
 
   Future<void> pickImage() async {
-    String cacheDirectory = await getCacheDirectoryPath();
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imagePath = image.path;
       setState(() {
         _pickedImage = imagePath;
-        print('this is the path : $_pickedImage');
-        print('this is the cache directory $cacheDirectory');
       });
     } catch (e) {
-      print('Failed to pick image: $e');
+      Text(e.toString());
     }
   }
 
@@ -83,8 +80,7 @@ class _AddBookState extends State<AddBook> {
     );
 
     try {
-      final savedBook = await DatabaseHelper.instance.create(book);
-      print('Expense saved: $savedBook');
+      await DatabaseHelper.instance.create(book);
 
       // Show success dialog
       // ignore: use_build_context_synchronously
@@ -194,7 +190,7 @@ class _AddBookState extends State<AddBook> {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,7 +207,7 @@ class _AddBookState extends State<AddBook> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Row(
@@ -224,9 +220,9 @@ class _AddBookState extends State<AddBook> {
                   onPressed: () {
                     closeModalBottom();
                   },
-                  child: Text('Cancel')),
+                  child: const Text('Cancel')),
               ElevatedButton(
-                  onPressed: _submitBookData, child: Text('Save Book')),
+                  onPressed: _submitBookData, child: const Text('Save Book')),
             ],
           ),
           if (_pickedImage == '')
