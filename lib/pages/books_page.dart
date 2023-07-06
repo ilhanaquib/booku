@@ -5,29 +5,38 @@ import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
 import 'package:booku/database_helper.dart';
 
+
 class Books extends StatefulWidget {
   const Books({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Books> createState() => _BooksState();
 }
 
 class _BooksState extends State<Books> {
+
+    @override
+  void initState() {
+    super.initState();
+    displayData(); 
+  }
+
   // dummy data
   List<Book> _books = [];
 
   Future<void> displayData() async {
-    print('displaAll');
+    print('displayAll');
+    print('onRefresh works');
     DatabaseHelper dbHelper = DatabaseHelper.instance;
 
-    // Call the readAllExpense function to retrieve all expenses
-    List<Book> allBook = await dbHelper.readAllBook();
-    print(allBook);
+    List<Book> allBooks = await dbHelper.readAllBook();
+    print(allBooks);
 
-    // Store the retrieved expenses in the _registeredExpenses list
-    _books = allBook;
+    setState(() {
+      _books = allBooks;
+    });
   }
 
   void _addBook(Book book) {
@@ -40,6 +49,7 @@ class _BooksState extends State<Books> {
   Widget build(BuildContext context) {
     Widget mainContent = BooksList(
       onAddbook: _addBook,
+      onRefresh: displayData,
       books: _books,
     );
 
@@ -49,10 +59,6 @@ class _BooksState extends State<Books> {
       ),
       body: Column(
         children: [Expanded(child: mainContent)],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: displayData,
-        child: const Icon(Icons.refresh),
       ),
     );
   }

@@ -10,7 +10,7 @@ import 'dart:io';
 final formatter = DateFormat.yMd();
 
 class AddBook extends StatefulWidget {
-  const AddBook({super.key, required this.onAddBook});
+  const AddBook({super.key, required this.onAddBook, });
 
   final void Function(Book book) onAddBook;
 
@@ -52,7 +52,7 @@ class _AddBookState extends State<AddBook> {
     if (_titleController.text.trim().isEmpty ||
         _authorController.text.trim().isEmpty ||
         _selectedDate == null ||
-        _pickedImage == null ||
+        _pickedImage == '' ||
         category == null) {
       showDialog(
         context: context,
@@ -87,6 +87,7 @@ class _AddBookState extends State<AddBook> {
       print('Expense saved: $savedBook');
 
       // Show success dialog
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -119,7 +120,6 @@ class _AddBookState extends State<AddBook> {
           ],
         ),
       );
-      print(e);
     }
   }
 
@@ -150,7 +150,7 @@ class _AddBookState extends State<AddBook> {
 
   @override
   Widget build(BuildContext context) {
-    File imageFile = File(_pickedImage!);
+    File imageFile = File(_pickedImage);
     return Padding(
       padding: const EdgeInsets.only(top: 45, left: 12, right: 12),
       child: Column(
