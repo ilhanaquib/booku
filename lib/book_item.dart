@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 class BookItem extends StatelessWidget {
   const BookItem({Key? key, required this.book}) : super(key: key);
@@ -10,6 +11,7 @@ class BookItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter = DateFormat.yMd();
+    File imageFile = File(book.image);
 
     return SizedBox(
       height: double.infinity,
@@ -19,7 +21,7 @@ class BookItem extends StatelessWidget {
           children: [
             const SizedBox(height: 20,),
             // book image
-            SizedBox(height: 165, child: Image.file(book.image)),
+            SizedBox(height: 165, child: Image.file(imageFile)),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -56,7 +58,7 @@ class BookItem extends StatelessWidget {
                   const SizedBox(width: 20),
                   // date
                   Text(
-                    formatter.format(book.datePublished),
+                    formatter.format(book.dateAdded),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
