@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 
 class BookItem extends StatelessWidget {
-  const BookItem({Key? key, required this.book}) : super(key: key);
+  const BookItem({Key? key, required this.book, required this.removeBook, required this.editBook }) : super(key: key);
 
   final Book book;
+  final void Function(Book) removeBook;
+  final void Function(Book) editBook;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,9 @@ class BookItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // book image
-              Container(
+              Stack(children: [
+                // book image
+                Container(
                   height: 250,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(50)),
@@ -33,19 +36,47 @@ class BookItem extends StatelessWidget {
                       imageFile,
                       fit: BoxFit.cover,
                     ),
-                  )),
+                  ),
+                ),
+                Positioned(
+                  right: 10,
+                  child: PopupMenuButton(
+                    icon: const Icon(
+                      Icons.more_horiz_outlined,
+                      color: Colors.white,
+                    ),
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        editBook(book);
+                      } else if (value == 'delete') {
+                        removeBook(book);
+                      }
+                    },
+                    itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
+                    ],
+                  ),
+                )
+              ]),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    book.title.capitalize(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                    softWrap: true,
-                    textAlign: TextAlign.center,
+                child: Text(
+                  book.title.capitalize(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 5),
               Padding(

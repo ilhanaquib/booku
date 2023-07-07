@@ -4,7 +4,7 @@ import 'package:booku/pages/books_list.dart';
 import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
 import 'package:booku/database_helper.dart';
-
+import 'edit_book.dart';
 
 class Books extends StatefulWidget {
   const Books({
@@ -16,11 +16,10 @@ class Books extends StatefulWidget {
 }
 
 class _BooksState extends State<Books> {
-
-    @override
+  @override
   void initState() {
     super.initState();
-    displayData(); 
+    displayData();
   }
 
   // dummy data
@@ -42,11 +41,39 @@ class _BooksState extends State<Books> {
     });
   }
 
+  void _removeBook(Book book) async {
+    print('_removeBook is being called');
+    DatabaseHelper dbHelper = DatabaseHelper.instance;
+    await dbHelper.delete(book.id);
+    setState(() {
+      _books.remove(book);
+    });
+  }
+
+  void _editBook(Book book) async {
+    print('__editBook is being called');
+    DatabaseHelper dbHelper = DatabaseHelper.instance;
+    await dbHelper.update(book);
+    setState(() {
+      _openEditBookOverlay();
+    });
+  }
+
+  void _openEditBookOverlay() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        useSafeArea: true,
+        builder: (context) => const EditBook());
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget mainContent = BooksList(
       onAddbook: _addBook,
       onRefresh: displayData,
+      onRemove: _removeBook,
+      onEdit: _editBook,
       books: _books,
     );
 

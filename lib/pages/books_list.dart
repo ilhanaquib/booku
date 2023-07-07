@@ -9,11 +9,15 @@ class BooksList extends StatefulWidget {
     required this.books,
     required this.onAddbook,
     required this.onRefresh,
+    required this.onEdit,
+    required this.onRemove,
   });
 
   final List<Book> books;
   final void Function(Book) onAddbook;
-   final Future<void> Function() onRefresh;
+  final void Function(Book) onRemove;
+  final void Function(Book) onEdit;
+  final Future<void> Function() onRefresh;
 
   @override
   State<BooksList> createState() => _BooksListState();
@@ -53,7 +57,7 @@ class _BooksListState extends State<BooksList> {
             );
           } else {
             final book = widget.books[index - 1];
-            return BookItem(book: book);
+            return BookItem(book: book, removeBook: widget.onRemove, editBook: widget.onEdit,);
           }
         },
       ),
