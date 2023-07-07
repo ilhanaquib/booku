@@ -15,56 +15,70 @@ class BookItem extends StatelessWidget {
 
     return SizedBox(
       height: double.infinity,
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 20,),
-            // book image
-            SizedBox(height: 165, child: Image.file(imageFile)),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Expanded(
+      child: SingleChildScrollView(
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // book image
+              Container(
+                  height: 250,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      imageFile,
+                      fit: BoxFit.cover,
+                    ),
+                  )),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    book.title.capitalize(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+              ),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  book.title.capitalize(),
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, ),
+                  book.author.capitalize(),
                   softWrap: true,
                   textAlign: TextAlign.center,
                 ),
               ),
-            ),
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                book.author.capitalize(),
-                softWrap: true,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  // category
-                  Expanded(
-                    child: Text(
-                      book.category.toString().split('.').last.capitalize(),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    // category
+                    Expanded(
+                      child: Text(
+                        book.category.toString().split('.').last.capitalize(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    // date
+                    Text(
+                      formatter.format(book.dateAdded),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  // date
-                  Text(
-                    formatter.format(book.dateAdded),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

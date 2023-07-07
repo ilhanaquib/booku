@@ -5,12 +5,16 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:booku/database_helper.dart';
+import 'package:sqflite/sqflite.dart';
 import 'dart:io';
 
 final formatter = DateFormat.yMd();
 
 class AddBook extends StatefulWidget {
-  const AddBook({super.key, required this.onAddBook, });
+  const AddBook({
+    super.key,
+    required this.onAddBook,
+  });
 
   final void Function(Book book) onAddBook;
 
@@ -80,7 +84,11 @@ class _AddBookState extends State<AddBook> {
     );
 
     try {
-      await DatabaseHelper.instance.create(book);
+      final databasesPath = await getDatabasesPath();
+      final path = databasesPath + '/book.db';
+      print('Database path: $path');
+      final savedBook = await DatabaseHelper.instance.create(book);
+      print('Expense saved: $savedBook');
 
       // Show success dialog
       // ignore: use_build_context_synchronously
@@ -215,7 +223,7 @@ class _AddBookState extends State<AddBook> {
             children: [
               ElevatedButton(
                   onPressed: pickImage, child: const Text('Select an image')),
-              const SizedBox(width: 31),
+              const SizedBox(width: 13),
               TextButton(
                   onPressed: () {
                     closeModalBottom();
