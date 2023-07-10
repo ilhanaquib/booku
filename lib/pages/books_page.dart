@@ -42,7 +42,6 @@ class _BooksState extends State<Books> {
   }
 
   void _removeBook(Book book) async {
-    print('_removeBook is being called');
     DatabaseHelper dbHelper = DatabaseHelper.instance;
     await dbHelper.delete(book.id);
     setState(() {
@@ -51,7 +50,6 @@ class _BooksState extends State<Books> {
   }
 
     void _editBook(Book book) async {
-    print('__editBook is being called');
     DatabaseHelper dbHelper = DatabaseHelper.instance;
     await dbHelper.update(book);
     setState(() {

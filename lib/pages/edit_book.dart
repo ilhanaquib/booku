@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:booku/models/books_model.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:booku/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
@@ -91,11 +90,8 @@ class _EditBookState extends State<EditBook> {
     );
 
     try {
-      final databasesPath = await getDatabasesPath();
-      final path = databasesPath + '/book.db';
-      print('Database path: $path');
-      final updatedRowCount = await DatabaseHelper.instance.update(updateBook);
-      print('Expense saved: $updatedRowCount');
+      await getDatabasesPath();
+      await DatabaseHelper.instance.update(updateBook);
 
       // Show success dialog
       // ignore: use_build_context_synchronously

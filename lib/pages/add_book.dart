@@ -84,11 +84,8 @@ class _AddBookState extends State<AddBook> {
     );
 
     try {
-      final databasesPath = await getDatabasesPath();
-      final path = databasesPath + '/book.db';
-      print('Database path: $path');
-      final savedBook = await DatabaseHelper.instance.create(book);
-      print('Expense saved: $savedBook');
+      await getDatabasesPath();
+      await DatabaseHelper.instance.create(book);
 
       // Show success dialog
       // ignore: use_build_context_synchronously
