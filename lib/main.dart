@@ -2,10 +2,14 @@ import 'package:booku/pages/books_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:booku/themes/theme_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create:(_) => ThemeProvider(),
+    child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -32,13 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData().copyWith(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(214, 106, 247, 247),
-        ),
-        textTheme: GoogleFonts.poppinsTextTheme(),
-      ),
+      theme: Provider.of<ThemeProvider>(context).selectedTheme,
       home: const Books(),
     );
   }
