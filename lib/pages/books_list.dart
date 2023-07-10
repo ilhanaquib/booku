@@ -57,7 +57,11 @@ class _BooksListState extends State<BooksList> {
             );
           } else {
             final book = widget.books[index - 1];
-            return BookItem(book: book, removeBook: widget.onRemove, editBook: widget.onEdit,);
+            return BookItem(
+              book: book,
+              removeBook: widget.onRemove,
+              editBook: widget.onEdit,
+            );
           }
         },
       ),

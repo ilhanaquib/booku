@@ -50,21 +50,22 @@ class _BooksState extends State<Books> {
     });
   }
 
-  void _editBook(Book book) async {
+    void _editBook(Book book) async {
     print('__editBook is being called');
     DatabaseHelper dbHelper = DatabaseHelper.instance;
     await dbHelper.update(book);
     setState(() {
-      _openEditBookOverlay();
+      _openEditBookOverlay(book);
     });
   }
 
-  void _openEditBookOverlay() {
+
+  void _openEditBookOverlay(Book book) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         useSafeArea: true,
-        builder: (context) => const EditBook());
+        builder: (context) =>  EditBook(book: book,));
   }
 
   @override

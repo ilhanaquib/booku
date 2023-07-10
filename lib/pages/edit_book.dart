@@ -11,10 +11,9 @@ import 'dart:io';
 final formatter = DateFormat.yMd();
 
 class EditBook extends StatefulWidget {
-  const EditBook({
-    super.key,
-  });
+  const EditBook({super.key, required this.book});
 
+  final Book book;
 
   @override
   State<EditBook> createState() => _EditBookState();
@@ -26,6 +25,17 @@ class _EditBookState extends State<EditBook> {
   String _pickedImage = '';
   DateTime? _selectedDate;
   Category? category;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController.text = widget.book.title;
+    _authorController.text = widget.book.author;
+    _pickedImage = widget.book.image;
+    _selectedDate = widget.book.dateAdded;
+    category = widget.book.category;
+  }
 
   Future<String> getCacheDirectoryPath() async {
     Directory appCacheDirectory = await getApplicationDocumentsDirectory();
@@ -72,21 +82,20 @@ class _EditBookState extends State<EditBook> {
       return;
     }
     // add new expense to list
-    final book = Book(
-      id: const Uuid().v4(),
+    final updateBook = widget.book.copy(
       title: _titleController.text,
       author: _authorController.text,
       image: _pickedImage,
       dateAdded: _selectedDate!,
-      category: category as Category,
+      category: category,
     );
 
     try {
       final databasesPath = await getDatabasesPath();
       final path = databasesPath + '/book.db';
       print('Database path: $path');
-      final savedBook = await DatabaseHelper.instance.create(book);
-      print('Expense saved: $savedBook');
+      final updatedRowCount = await DatabaseHelper.instance.update(updateBook);
+      print('Expense saved: $updatedRowCount');
 
       // Show success dialog
       // ignore: use_build_context_synchronously
@@ -228,7 +237,7 @@ class _EditBookState extends State<EditBook> {
                   },
                   child: const Text('Cancel')),
               ElevatedButton(
-                  onPressed: _submitBookData, child: const Text('Save Book')),
+                  onPressed: _submitBookData, child: const Text('Save Edit')),
             ],
           ),
           if (_pickedImage == '')

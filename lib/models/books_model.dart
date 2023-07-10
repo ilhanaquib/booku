@@ -1,5 +1,3 @@
-
-
 enum Category { career, education, hobby, cook }
 
 // this section is for database
@@ -48,7 +46,7 @@ class Book {
       };
 
   String categoryToString(Category category) {
-    return category.toString().split('.').last;
+    return category.index.toString();
   }
 
   Book copy({
@@ -74,7 +72,7 @@ class Book {
         author: json[BookFields.author] as String,
         image: json[BookFields.image] as String,
         dateAdded: DateTime.parse(json[BookFields.date] as String),
-        category:
-            Category.values[int.parse(json[BookFields.category] as String)],
+        category: Category.values[int.parse(
+            json[BookFields.category] as String)],
       );
 }
