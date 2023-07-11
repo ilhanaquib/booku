@@ -78,6 +78,8 @@ class _BooksState extends State<Books> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     Widget mainContent = BooksList(
@@ -114,10 +116,9 @@ class _BooksState extends State<Books> {
               child: Text(
                 'Settings',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold
-                ),
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(title: const Text('Themes'), onTap: _openThemesSelect),

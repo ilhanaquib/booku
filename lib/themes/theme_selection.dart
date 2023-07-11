@@ -2,6 +2,8 @@ import 'package:booku/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'theme_provider.dart';
+import 'package:booku/payment/paywall.dart';
+import 'package:booku/payment/purchases.dart';
 
 class ThemeSelectionScreen extends StatefulWidget {
   @override
@@ -9,6 +11,17 @@ class ThemeSelectionScreen extends StatefulWidget {
 }
 
 class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
+  
+  void fetchOffers(BuildContext context) async {
+    final offerings = await PurchaseApi.fetchOffers();
+    if (offerings.isNotEmpty) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => Paywall(offer: offerings.first),
+      );
+    }
+  }
+
   final List<ThemeData> themes = [
     redTheme,
     purpleTheme,
@@ -40,6 +53,7 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
         itemBuilder: (context, index) {
           final theme = themes[index];
           final themeName = themeNames[theme];
+          final isRedTheme = theme == redTheme;
 
           return ListTile(
             title: Text(themeName ?? ''),
@@ -48,7 +62,11 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
                 selectedIndex = index;
               });
 
-              themeProvider.setTheme(theme);
+              if (isRedTheme) {
+                themeProvider.setTheme(theme);
+              } else {
+                fetchOffers(context);
+              }
               Navigator.pop(context);
             },
           );
