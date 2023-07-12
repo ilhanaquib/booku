@@ -11,14 +11,23 @@ class ThemeSelectionScreen extends StatefulWidget {
 }
 
 class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
-  
-  void fetchOffers(BuildContext context) async {
+  Future fetchOffers(BuildContext context) async {
     final offerings = await PurchaseApi.fetchOffers();
     if (offerings.isNotEmpty) {
       showModalBottomSheet(
         context: context,
-        builder: (context) => Paywall(offer: offerings.first),
-      );
+        builder: (context) =>
+            Paywall(offer: offerings.first, selectedIndex: selectedIndex),
+      ).then((value) {
+        if (value != null) {
+          final themeProvider =
+              Provider.of<ThemeProvider>(context, listen: false);
+          final selectedTheme = themes[selectedIndex];
+          if (themeProvider.isThemePurchased(selectedTheme)) {
+            themeProvider.setTheme(selectedTheme);
+          }
+        }
+      });
     }
   }
 
@@ -53,20 +62,22 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
         itemBuilder: (context, index) {
           final theme = themes[index];
           final themeName = themeNames[theme];
-          final isRedTheme = theme == redTheme;
+          final isPurchasedTheme = themeProvider.isThemePurchased(theme);
 
           return ListTile(
             title: Text(themeName ?? ''),
-            onTap: () {
+            onTap: () async {
               setState(() {
                 selectedIndex = index;
               });
 
-              if (isRedTheme) {
+              if (isPurchasedTheme) {
                 themeProvider.setTheme(theme);
               } else {
-                fetchOffers(context);
+                await fetchOffers(context);
+                return; // Return without closing the ThemeSelectionScreen
               }
+
               Navigator.pop(context);
             },
           );

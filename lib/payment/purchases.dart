@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
