@@ -3,6 +3,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:booku/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:booku/themes/themes.dart';
+import 'package:flutter/foundation.dart';
 
 class Paywall extends StatefulWidget {
   const Paywall({Key? key, required this.offer, required this.selectedIndex})
@@ -92,4 +93,22 @@ class _PaywallState extends State<Paywall> {
           context, true); // Return true to indicate a successful purchase
     }
   }
+
+  // Future<void> restorePurchases(Package package) async {
+  //   CustomerInfo customerInfo = await Purchases.restorePurchases();
+  //   print('customer id: ${customerInfo.originalAppUserId}');
+  //   print('customer entitlements : ${customerInfo.entitlements.all.length}');
+    
+  //   for(String entitlementId in customerInfo.entitlements.all.keys){
+  //     if(packageThemeMap.containsKey(entitlementId)){
+  //       ThemeData? theme = packageThemeMap[entitlementId];
+  //       print('entitlement id : $entitlementId');
+  //       print('Mathcing theme found : $theme');
+
+  //       if(entitlementId.contains(package.identifier)){
+  //         // final ThemeData restoredThemes = Paywall();
+  //       }
+  //     }
+  //   }
+  // }
 }

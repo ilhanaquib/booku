@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "759727416554",
+    "firebase_url": "https://booku-f6e35-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "booku-f6e35",
+    "storage_bucket": "booku-f6e35.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759727416554:android:b9ecd56d683c157c32a393",
+        "android_client_info": {
+          "package_name": "com.ilhan.booku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759727416554-g0fgadpfh4pr7fatpeqh7rap0e6q65kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1qmqQFyLL-lwgoUsnPsyIZiyAPkeo0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759727416554-g0fgadpfh4pr7fatpeqh7rap0e6q65kh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

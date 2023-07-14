@@ -6,11 +6,14 @@ import 'package:booku/payment/paywall.dart';
 import 'package:booku/payment/purchases.dart';
 
 class ThemeSelectionScreen extends StatefulWidget {
+  const ThemeSelectionScreen({super.key});
+
   @override
   _ThemeSelectionScreenState createState() => _ThemeSelectionScreenState();
 }
 
 class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
+  // this fucntion fetch all the offers from revenueCat
   Future fetchOffers(BuildContext context) async {
     final offerings = await PurchaseApi.fetchOffers();
     if (offerings.isNotEmpty) {
@@ -31,6 +34,7 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
     }
   }
 
+  // this list stores all the themes
   final List<ThemeData> themes = [
     redTheme,
     purpleTheme,
@@ -41,6 +45,7 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
 
   int selectedIndex = 0;
 
+  // this maps the themes to a name
   final Map<ThemeData, String> themeNames = {
     redTheme: 'Red Theme',
     purpleTheme: 'Purple Theme',

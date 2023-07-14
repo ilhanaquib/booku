@@ -1,9 +1,8 @@
-// this page is to list/show all the books user added to the app
-
+import 'package:booku/data_selection.dart';
 import 'package:booku/pages/books_list.dart';
 import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
-import 'package:booku/database_helper.dart';
+import 'package:booku/databases/database_helper.dart';
 import 'edit_book.dart';
 import 'package:booku/themes/theme_selection.dart';
 
@@ -18,6 +17,7 @@ class Books extends StatefulWidget {
 
 class _BooksState extends State<Books> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _dataManagementDropdownOpen = false;
   @override
   void initState() {
     super.initState();
@@ -73,12 +73,19 @@ class _BooksState extends State<Books> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ThemeSelectionScreen(),
+        builder: (context) => const ThemeSelectionScreen(),
       ),
     );
   }
 
-
+  void _openDataSelect() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DataSelection(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +123,44 @@ class _BooksState extends State<Books> {
               child: Text(
                 'Settings',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            ListTile(title: const Text('Themes'), onTap: _openThemesSelect),
+            ListTile(
+              title: const Text('Themes'),
+              onTap: _openThemesSelect,
+            ),
+            ListTile(
+              title: const Text('Data management'),
+              trailing: Icon(Icons.arrow_drop_down),
+              onTap: () {
+                // Handle the tap to open/close the dropdown
+                setState(() {
+                  // Toggle the dropdown state
+                  _dataManagementDropdownOpen = !_dataManagementDropdownOpen;
+                });
+              },
+            ),
+            if (_dataManagementDropdownOpen) // Show the dropdown if it's open
+              Column(
+                children: [
+                  ListTile(
+                    title: const Text('Upload'),
+                    onTap: () {
+                      // Handle button 1 tap
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Download'),
+                    onTap: () {
+                      // Handle button 2 tap
+                    },
+                  ),
+                ],
+              ),
           ],
         ),
       ),

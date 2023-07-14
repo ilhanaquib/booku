@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 class PurchaseApi {
   static const _apiKey = 'goog_YnBHrKHEtGrJvUzPFqxKMyoIPmd';
@@ -16,6 +17,9 @@ class PurchaseApi {
 
       return current == null ? [] : [current];
     } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       return [];
     }
   }

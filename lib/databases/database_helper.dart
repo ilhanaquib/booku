@@ -1,9 +1,46 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:booku/models/books_model.dart';
+import 'package:booku/themes/themes.dart';
 
 class DatabaseHelper {
+  static const tablePurchasedThemes = 'purchased_themes';
+  static const colThemeId = 'theme_id';
+
+  //-------------------themes only---------------------
+  Future<List<ThemeData>> getPurchasedThemes() async {
+    final db = await instance.database;
+
+    final results = await db.query(tablePurchasedThemes);
+    return results.map((row) => _themeFromRow(row)).toList();
+  }
+
+  Future<void> savePurchasedThemes(List<ThemeData> themes) async {
+    final db = await instance.database;
+
+    // Delete existing purchased themes
+    await db.delete(tablePurchasedThemes);
+
+    // Insert new purchased themes
+    for (var theme in themes) {
+      final themeMap = _themeToRow(theme);
+      await db.insert(tablePurchasedThemes, themeMap);
+    }
+  }
+
+  ThemeData _themeFromRow(Map<String, dynamic> row) {
+    final themeId = row[colThemeId] as int;
+    return allThemes[themeId];
+  }
+
+  Map<String, dynamic> _themeToRow(ThemeData theme) {
+    final themeId = allThemes.indexOf(theme);
+    return {colThemeId: themeId};
+  }
+  //---------------------------------------------------
+
   static final DatabaseHelper instance = DatabaseHelper._init();
 
   //this is variable to store database
@@ -38,6 +75,12 @@ class DatabaseHelper {
       ${BookFields.image} $textType,
       ${BookFields.date} $textType,
       ${BookFields.category} $textType
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $tablePurchasedThemes (
+      $colThemeId INTEGER PRIMARY KEY
     )
   ''');
   }

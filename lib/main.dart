@@ -5,12 +5,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:booku/themes/theme_provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchaseApi.init();
-  runApp(ChangeNotifierProvider(
-    create:(_) => ThemeProvider(),
-    child: const MyApp()));
+
+  final themeProvider = ThemeProvider();
+  await themeProvider.loadPurchasedThemes();
+
+  runApp(ChangeNotifierProvider.value(
+      value: themeProvider, child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
