@@ -11,6 +11,7 @@ void main() async {
 
   final themeProvider = ThemeProvider();
   await themeProvider.loadPurchasedThemes();
+  await themeProvider.loadSelectedThemeId();
 
   runApp(ChangeNotifierProvider.value(
       value: themeProvider, child: const MyApp()));

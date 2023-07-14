@@ -8,14 +8,20 @@ import 'package:booku/themes/themes.dart';
 class DatabaseHelper {
   static const tablePurchasedThemes = 'purchased_themes';
   static const colThemeId = 'theme_id';
+  static const tableSelectedTheme = 'selected_theme';
 
   //-------------------themes only---------------------
-  Future<List<ThemeData>> getPurchasedThemes() async {
-    final db = await instance.database;
+Future<List<ThemeData>> getPurchasedThemes() async {
+  final db = await instance.database;
 
-    final results = await db.query(tablePurchasedThemes);
-    return results.map((row) => _themeFromRow(row)).toList();
-  }
+  final results = await db.query(tablePurchasedThemes);
+  final themeList = results.map((row) => _themeFromRow(row)).toList();
+
+  // Filter out any null themes
+  final purchasedThemes = themeList.whereType<ThemeData>().toList();
+
+  return purchasedThemes;
+}
 
   Future<void> savePurchasedThemes(List<ThemeData> themes) async {
     final db = await instance.database;
@@ -30,14 +36,33 @@ class DatabaseHelper {
     }
   }
 
-  ThemeData _themeFromRow(Map<String, dynamic> row) {
-    final themeId = row[colThemeId] as int;
-    return allThemes[themeId];
+  ThemeData? _themeFromRow(Map<String, dynamic> row) {
+    final themeId = row[colThemeId] as int?;
+    return themeId != null ? allThemes[themeId] : null;
   }
 
   Map<String, dynamic> _themeToRow(ThemeData theme) {
     final themeId = allThemes.indexOf(theme);
     return {colThemeId: themeId};
+  }
+
+Future<int> getSelectedThemeId() async {
+  final db = await instance.database;
+
+  final results = await db.query(tableSelectedTheme);
+  if (results.isNotEmpty) {
+    final themeId = results.first[colThemeId];
+    return themeId != null ? themeId as int : 0;
+  }
+  return 0;
+}
+
+  Future<void> saveSelectedThemeId(int themeId) async {
+    final db = await instance.database;
+
+    await db.delete(tableSelectedTheme);
+
+    await db.insert(tableSelectedTheme, {colThemeId: themeId});
   }
   //---------------------------------------------------
 
@@ -80,6 +105,12 @@ class DatabaseHelper {
 
     await db.execute('''
     CREATE TABLE $tablePurchasedThemes (
+      $colThemeId INTEGER PRIMARY KEY
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $tableSelectedTheme (
       $colThemeId INTEGER PRIMARY KEY
     )
   ''');

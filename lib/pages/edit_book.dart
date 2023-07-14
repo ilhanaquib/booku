@@ -98,7 +98,7 @@ class _EditBookState extends State<EditBook> {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Book added successfully'),
+          title: const Text('Book edited successfully'),
           actions: [
             TextButton(
               onPressed: () {

@@ -133,34 +133,6 @@ class _BooksState extends State<Books> {
               title: const Text('Themes'),
               onTap: _openThemesSelect,
             ),
-            ListTile(
-              title: const Text('Data management'),
-              trailing: Icon(Icons.arrow_drop_down),
-              onTap: () {
-                // Handle the tap to open/close the dropdown
-                setState(() {
-                  // Toggle the dropdown state
-                  _dataManagementDropdownOpen = !_dataManagementDropdownOpen;
-                });
-              },
-            ),
-            if (_dataManagementDropdownOpen) // Show the dropdown if it's open
-              Column(
-                children: [
-                  ListTile(
-                    title: const Text('Upload'),
-                    onTap: () {
-                      // Handle button 1 tap
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Download'),
-                    onTap: () {
-                      // Handle button 2 tap
-                    },
-                  ),
-                ],
-              ),
           ],
         ),
       ),

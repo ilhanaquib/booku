@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'themes.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeData _selectedTheme = redTheme;
+  int _selectedThemeId = 0;
   List<ThemeData> _purchasedThemes = [redTheme]; // Start with red theme as default
 
-  ThemeData get selectedTheme => _selectedTheme;
+  ThemeData get selectedTheme => allThemes[_selectedThemeId];
+
   List<ThemeData> get purchasedThemes => _purchasedThemes;
 
   void setTheme(ThemeData theme) {
-    _selectedTheme = theme;
+    _selectedThemeId = allThemes.indexOf(theme);
+    _saveSelectedThemeId();
     notifyListeners();
   }
 
@@ -33,7 +35,18 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
+    Future<void> loadSelectedThemeId() async {
+    _selectedThemeId = await DatabaseHelper.instance.getSelectedThemeId();
+    if (_selectedThemeId == null) {
+      _selectedThemeId = 0; // Default to the first theme if no selection found
+    }
+  }
+
   Future<void> _savePurchasedThemes() async {
     await DatabaseHelper.instance.savePurchasedThemes(_purchasedThemes);
+  }
+
+    Future<void> _saveSelectedThemeId() async {
+    await DatabaseHelper.instance.saveSelectedThemeId(_selectedThemeId);
   }
 }
