@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:booku/themes/theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchaseApi.init();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   final themeProvider = ThemeProvider();
   await themeProvider.loadPurchasedThemes();
   await themeProvider.loadSelectedThemeId();
 
-  runApp(ChangeNotifierProvider.value(
-      value: themeProvider, child: const MyApp()));
+  runApp(
+      ChangeNotifierProvider.value(value: themeProvider, child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

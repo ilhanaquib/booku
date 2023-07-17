@@ -1,4 +1,5 @@
 import 'package:booku/data_selection.dart';
+import 'package:booku/databases/firebase_helper.dart';
 import 'package:booku/pages/books_list.dart';
 import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
@@ -18,6 +19,9 @@ class Books extends StatefulWidget {
 class _BooksState extends State<Books> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _dataManagementDropdownOpen = false;
+  bool _uploadInProgress = false;
+  bool _downloadInProgress = false;
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +91,28 @@ class _BooksState extends State<Books> {
     );
   }
 
+  void _startUploadProcess() {
+    setState(() {
+      _uploadInProgress = true;
+    });
+    synchronizeWithFirebase().then((_) {
+      setState(() {
+        _uploadInProgress = false;
+      });
+    });
+  }
+
+  void _startDownloadProcess() {
+    setState(() {
+      _downloadInProgress = true;
+    });
+    downloadDataToLocalDatabase().then((_) {
+      setState(() {
+        _downloadInProgress = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget mainContent = BooksList(
@@ -133,6 +159,52 @@ class _BooksState extends State<Books> {
               title: const Text('Themes'),
               onTap: _openThemesSelect,
             ),
+            ListTile(
+              title: const Text('Data management'),
+              trailing: Icon(Icons.arrow_drop_down),
+              onTap: () {
+                // Handle the tap to open/close the dropdown
+                setState(() {
+                  // Toggle the dropdown state
+                  _dataManagementDropdownOpen = !_dataManagementDropdownOpen;
+                });
+              },
+            ),
+            if (_dataManagementDropdownOpen) // Show the dropdown if it's open
+              Column(
+                children: [
+                  ListTile(
+                    title: const Text('Upload'),
+                    onTap: () {
+                      if (!_uploadInProgress && !_downloadInProgress) {
+                        _startUploadProcess();
+                      }
+                    },
+                    trailing: _uploadInProgress
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          )
+                        : null,
+                  ),
+                  ListTile(
+                    title: const Text('Download'),
+                    onTap: () {
+                      if (!_uploadInProgress && !_downloadInProgress) {
+                        _startDownloadProcess();
+                      }
+                    },
+                    trailing: _downloadInProgress
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          )
+                        : null,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

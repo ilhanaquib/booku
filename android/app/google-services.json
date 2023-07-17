@@ -30,6 +30,13 @@
             {
               "client_id": "759727416554-g0fgadpfh4pr7fatpeqh7rap0e6q65kh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "759727416554-2898c743qiuuvse8eud3etsr328j2t2g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ilhan.booku"
+              }
             }
           ]
         }

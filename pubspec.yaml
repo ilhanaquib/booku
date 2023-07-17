@@ -47,6 +47,8 @@ dependencies:
   purchases_flutter: ^5.2.3
   url_launcher: ^6.1.12
   shared_preferences: ^2.2.0
+  firebase_core: ^2.15.0
+  cloud_firestore: ^4.8.3
 
 dev_dependencies:
   flutter_test:
