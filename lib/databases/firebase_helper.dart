@@ -129,8 +129,27 @@ Future<void> downloadDataToLocalDatabase() async {
 
     final Database db = await openDatabase('books.db');
     await db.transaction((txn) async {
+      final List<Map<String, dynamic>> existingData =
+          await txn.query('books'); // Fetch existing local data
+      final Set<String> existingIds =
+          existingData.map((data) => data[BookFields.id] as String).toSet();
+
+      // Filter out downloaded data that already exists locally
+      final List<Map<String, dynamic>> filteredData = downloadedData
+          .where((data) => !existingIds.contains(data[BookFields.id]))
+          .toList();
+
+      // Merge filtered data with existing data
+      final List<Map<String, dynamic>> mergedData = [
+        ...existingData,
+        ...filteredData,
+      ];
+
+      // Delete existing data in the local database
       await txn.delete('books');
-      for (var data in downloadedData) {
+
+      // Insert merged data into the local database
+      for (var data in mergedData) {
         await txn.insert('books', data);
       }
     });
