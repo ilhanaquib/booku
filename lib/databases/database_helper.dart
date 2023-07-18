@@ -1,3 +1,5 @@
+// this database helps with managing data regarding books, purchased themes, and selected themes
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -99,7 +101,9 @@ Future<int> getSelectedThemeId() async {
       ${BookFields.author} $textType,
       ${BookFields.image} $textType,
       ${BookFields.date} $textType,
-      ${BookFields.category} $textType
+      ${BookFields.category} $textType,
+      ${BookFields.imageUrl} $textType,
+      image TEXT NULL
     )
   ''');
 
@@ -122,6 +126,7 @@ Future<int> getSelectedThemeId() async {
     final bookMap = book.toJson();
     final updatedBookMap = Map<String, dynamic>.from(bookMap);
     updatedBookMap['_category'] = book.category.index;
+    updatedBookMap['_imageURL'] = book.imageUrl;
 
     final id = await db.insert(tableBook, updatedBookMap);
     return book.copy(id: id.toString());

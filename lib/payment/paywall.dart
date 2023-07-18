@@ -93,22 +93,4 @@ class _PaywallState extends State<Paywall> {
           context, true); // Return true to indicate a successful purchase
     }
   }
-
-  // Future<void> restorePurchases(Package package) async {
-  //   CustomerInfo customerInfo = await Purchases.restorePurchases();
-  //   print('customer id: ${customerInfo.originalAppUserId}');
-  //   print('customer entitlements : ${customerInfo.entitlements.all.length}');
-    
-  //   for(String entitlementId in customerInfo.entitlements.all.keys){
-  //     if(packageThemeMap.containsKey(entitlementId)){
-  //       ThemeData? theme = packageThemeMap[entitlementId];
-  //       print('entitlement id : $entitlementId');
-  //       print('Mathcing theme found : $theme');
-
-  //       if(entitlementId.contains(package.identifier)){
-  //         // final ThemeData restoredThemes = Paywall();
-  //       }
-  //     }
-  //   }
-  // }
 }

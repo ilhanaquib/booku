@@ -1,3 +1,4 @@
+import 'package:booku/databases/database_helper.dart';
 import 'package:booku/pages/books_page.dart';
 import 'package:booku/payment/purchases.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchaseApi.init();
+
+  await DatabaseHelper.instance.database;
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

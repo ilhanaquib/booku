@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:booku/models/books_model.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:io';
 
 class BookItem extends StatelessWidget {
@@ -18,7 +19,8 @@ class BookItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter = DateFormat.yMd();
-    File imageFile = File(book.image);
+    // Image imageFile = Image.file(File(book.image));
+    // Image imageNetwork = Image.network(book.imageUrl);
 
     return SizedBox(
       height: double.infinity,
@@ -37,9 +39,24 @@ class BookItem extends StatelessWidget {
                         BoxDecoration(borderRadius: BorderRadius.circular(50)),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        imageFile,
-                        fit: BoxFit.cover,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          if (book.image.isNotEmpty)
+                            Image.file(
+                              File(book.image),
+                              fit: BoxFit.cover,
+                            ),
+                          if (book.imageUrl.isNotEmpty)
+                            CachedNetworkImage(
+                              imageUrl: book.imageUrl,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -114,7 +131,10 @@ class BookItem extends StatelessWidget {
                     ),
                     const PopupMenuItem(
                       value: 'delete',
-                      child: Text('Delete' , style: TextStyle(color: Colors.red),),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ],
                 ),
