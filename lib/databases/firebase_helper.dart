@@ -1,4 +1,6 @@
 // this is a firebase helper for uploading data from sqflite to firebase and downloading from firebase to sqflite
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,9 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+
 import 'package:booku/models/books_model.dart';
-import 'dart:convert';
-import 'dart:io';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -99,7 +100,6 @@ Future<void> synchronizeWithFirebase() async {
     // Upload local books to Firebase
     final String jsonData = await convertToJSON(localBooks);
     await uploadBooks(jsonData);
-
   } catch (e) {
     //
   }
@@ -134,7 +134,6 @@ Future<void> downloadDataToLocalDatabase() async {
         await txn.insert('books', data);
       }
     });
-
   } catch (e) {
     //
   }

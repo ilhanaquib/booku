@@ -1,9 +1,12 @@
 // this database helps with managing data regarding books, purchased themes, and selected themes
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
 import 'package:booku/models/books_model.dart';
 import 'package:booku/themes/themes.dart';
 
@@ -13,17 +16,17 @@ class DatabaseHelper {
   static const tableSelectedTheme = 'selected_theme';
 
   //-------------------themes only---------------------
-Future<List<ThemeData>> getPurchasedThemes() async {
-  final db = await instance.database;
+  Future<List<ThemeData>> getPurchasedThemes() async {
+    final db = await instance.database;
 
-  final results = await db.query(tablePurchasedThemes);
-  final themeList = results.map((row) => _themeFromRow(row)).toList();
+    final results = await db.query(tablePurchasedThemes);
+    final themeList = results.map((row) => _themeFromRow(row)).toList();
 
-  // Filter out any null themes
-  final purchasedThemes = themeList.whereType<ThemeData>().toList();
+    // Filter out any null themes
+    final purchasedThemes = themeList.whereType<ThemeData>().toList();
 
-  return purchasedThemes;
-}
+    return purchasedThemes;
+  }
 
   Future<void> savePurchasedThemes(List<ThemeData> themes) async {
     final db = await instance.database;
@@ -48,16 +51,16 @@ Future<List<ThemeData>> getPurchasedThemes() async {
     return {colThemeId: themeId};
   }
 
-Future<int> getSelectedThemeId() async {
-  final db = await instance.database;
+  Future<int> getSelectedThemeId() async {
+    final db = await instance.database;
 
-  final results = await db.query(tableSelectedTheme);
-  if (results.isNotEmpty) {
-    final themeId = results.first[colThemeId];
-    return themeId != null ? themeId as int : 0;
+    final results = await db.query(tableSelectedTheme);
+    if (results.isNotEmpty) {
+      final themeId = results.first[colThemeId];
+      return themeId != null ? themeId as int : 0;
+    }
+    return 0;
   }
-  return 0;
-}
 
   Future<void> saveSelectedThemeId(int themeId) async {
     final db = await instance.database;

@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:booku/databases/database_helper.dart';
 import 'package:booku/pages/books_page.dart';
 import 'package:booku/payment/purchases.dart';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:booku/themes/theme_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {

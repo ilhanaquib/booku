@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 var kColorScheme1 =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 247, 78, 66));
 var kColorScheme2 =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 223, 117, 247));
-var kColorScheme3 = ColorScheme.fromSeed(seedColor:const Color.fromARGB(255, 143, 223, 255));
-var kColorScheme4 = ColorScheme.fromSeed(seedColor:const Color.fromARGB(255, 252, 177, 112));
-var kColorScheme5 =ColorScheme.fromSeed(seedColor:const Color.fromARGB(255, 112, 248, 153));
+var kColorScheme3 =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 143, 223, 255));
+var kColorScheme4 =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 252, 177, 112));
+var kColorScheme5 =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 112, 248, 153));
 
 final redTheme = ThemeData().copyWith(
   useMaterial3: true,

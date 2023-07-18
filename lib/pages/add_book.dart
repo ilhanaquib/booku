@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
-import 'package:booku/models/books_model.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import 'package:booku/databases/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io';
+
+import 'package:booku/models/books_model.dart';
+import 'package:booku/databases/database_helper.dart';
 
 final formatter = DateFormat.yMd();
 
@@ -127,31 +130,31 @@ class _AddBookState extends State<AddBook> {
   }
 
   Future<Book> fetchImageUrlForBook(Book book) async {
-  // Fetch the imageUrl for the book from the appropriate source
-  final imageUrl = await fetchImageUrlFromFirebase(book);
+    // Fetch the imageUrl for the book from the appropriate source
+    final imageUrl = await fetchImageUrlFromFirebase(book);
 
-  // Create a new book object with the updated imageUrl
-  return book.copy(imageUrl: imageUrl ?? '');
-}
-
-Future<String?> fetchImageUrlFromFirebase(Book book) async {
-  try {
-    // Assuming you have a 'books' collection in Firestore
-    final snapshot = await FirebaseFirestore.instance
-        .collection('books')
-        .doc(book.id)
-        .get();
-
-    if (snapshot.exists) {
-      final data = snapshot.data() as Map<String, dynamic>;
-      return data['imageUrl'] as String?;
-    } else {
-      return null; // Book document not found
-    }
-  } catch (e) {
-    return null; // Error occurred
+    // Create a new book object with the updated imageUrl
+    return book.copy(imageUrl: imageUrl ?? '');
   }
-}
+
+  Future<String?> fetchImageUrlFromFirebase(Book book) async {
+    try {
+      // Assuming you have a 'books' collection in Firestore
+      final snapshot = await FirebaseFirestore.instance
+          .collection('books')
+          .doc(book.id)
+          .get();
+
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        return data['imageUrl'] as String?;
+      } else {
+        return null; // Book document not found
+      }
+    } catch (e) {
+      return null; // Error occurred
+    }
+  }
 
   void _presentDatePicker() async {
     final now = DateTime.now();
