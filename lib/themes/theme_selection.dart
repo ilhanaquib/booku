@@ -38,7 +38,7 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
 
   // this list stores all the themes
   final List<ThemeData> themes = [
-    redTheme,
+    defaultTheme,
     purpleTheme,
     tealTheme,
     orangeTheme,
@@ -49,7 +49,7 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
 
   // this maps the themes to a name
   final Map<ThemeData, String> themeNames = {
-    redTheme: 'Red Theme',
+    defaultTheme: 'Default Theme',
     purpleTheme: 'Purple Theme',
     tealTheme: 'Teal Theme',
     orangeTheme: 'Orange Theme',

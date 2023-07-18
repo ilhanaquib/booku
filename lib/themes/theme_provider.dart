@@ -6,7 +6,7 @@ import 'package:booku/databases/database_helper.dart';
 class ThemeProvider extends ChangeNotifier {
   int _selectedThemeId = 0;
   List<ThemeData> _purchasedThemes = [
-    redTheme
+    defaultTheme
   ]; // Start with red theme as default
 
   ThemeData get selectedTheme => allThemes[_selectedThemeId];
@@ -35,7 +35,7 @@ class ThemeProvider extends ChangeNotifier {
     _purchasedThemes = await DatabaseHelper.instance.getPurchasedThemes();
     if (_purchasedThemes.isEmpty) {
       _purchasedThemes = [
-        redTheme
+        defaultTheme
       ]; // Start with red theme if no purchased themes found
     }
   }

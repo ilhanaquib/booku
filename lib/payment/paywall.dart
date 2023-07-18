@@ -47,7 +47,7 @@ class _PaywallState extends State<Paywall> {
     // Get the theme based on the package identifier
     ThemeData? theme = packageThemeMap[package.identifier];
     // Return the theme if found, or a default theme otherwise
-    return theme ?? redTheme;
+    return theme ?? defaultTheme;
   }
 
   @override
