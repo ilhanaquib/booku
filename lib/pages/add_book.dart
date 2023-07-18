@@ -106,7 +106,6 @@ class _AddBookState extends State<AddBook> {
           ],
         ),
       );
-      final bookWithImageUrl = await fetchImageUrlForBook(book);
     } catch (e) {
       // Handle database error
       showDialog(
@@ -150,7 +149,6 @@ Future<String?> fetchImageUrlFromFirebase(Book book) async {
       return null; // Book document not found
     }
   } catch (e) {
-    print('Error fetching imageUrl from Firebase: $e');
     return null; // Error occurred
   }
 }

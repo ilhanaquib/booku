@@ -4,7 +4,9 @@ import 'themes.dart';
 
 class ThemeProvider extends ChangeNotifier {
   int _selectedThemeId = 0;
-  List<ThemeData> _purchasedThemes = [redTheme]; // Start with red theme as default
+  List<ThemeData> _purchasedThemes = [
+    redTheme
+  ]; // Start with red theme as default
 
   ThemeData get selectedTheme => allThemes[_selectedThemeId];
 
@@ -31,22 +33,21 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> loadPurchasedThemes() async {
     _purchasedThemes = await DatabaseHelper.instance.getPurchasedThemes();
     if (_purchasedThemes.isEmpty) {
-      _purchasedThemes = [redTheme]; // Start with red theme if no purchased themes found
+      _purchasedThemes = [
+        redTheme
+      ]; // Start with red theme if no purchased themes found
     }
   }
 
-    Future<void> loadSelectedThemeId() async {
+  Future<void> loadSelectedThemeId() async {
     _selectedThemeId = await DatabaseHelper.instance.getSelectedThemeId();
-    if (_selectedThemeId == null) {
-      _selectedThemeId = 0; // Default to the first theme if no selection found
-    }
   }
 
   Future<void> _savePurchasedThemes() async {
     await DatabaseHelper.instance.savePurchasedThemes(_purchasedThemes);
   }
 
-    Future<void> _saveSelectedThemeId() async {
+  Future<void> _saveSelectedThemeId() async {
     await DatabaseHelper.instance.saveSelectedThemeId(_selectedThemeId);
   }
 }

@@ -51,9 +51,9 @@ class BookItem extends StatelessWidget {
                             CachedNetworkImage(
                               imageUrl: book.imageUrl,
                               placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
+                                  const CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               fit: BoxFit.cover,
                             ),
                         ],

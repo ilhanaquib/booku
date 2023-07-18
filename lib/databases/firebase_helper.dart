@@ -36,17 +36,13 @@ Future<void> uploadBooks(String jsonData) async {
 
       final documentRef = collectionRef.doc(documentId);
       await documentRef.set(book, SetOptions(merge: true));
-      print('Updated/Added book with ID: $documentId');
     }
-
-    print('Books uploaded successfully.');
   } catch (e) {
-    print('Error uploading books: $e');
+    //
   }
 }
 
 Future<String?> uploadImageToStorage(File imageFile, String imageName) async {
-  print('Uploading image: $imageName');
   try {
     final storageRef =
         storage.FirebaseStorage.instance.ref().child('book_images/$imageName');
@@ -54,7 +50,6 @@ Future<String?> uploadImageToStorage(File imageFile, String imageName) async {
     final taskSnapshot = await uploadTask.whenComplete(() {});
     return await taskSnapshot.ref.getDownloadURL();
   } catch (e) {
-    print('Error uploading image: $e');
     return null;
   }
 }
@@ -98,7 +93,6 @@ Future<void> synchronizeWithFirebase() async {
     for (var bookId in booksToDelete) {
       final documentRef = _firestore.collection('books').doc(bookId);
       batch.delete(documentRef);
-      print('Deleted book with ID: $bookId');
     }
     await batch.commit();
 
@@ -106,9 +100,8 @@ Future<void> synchronizeWithFirebase() async {
     final String jsonData = await convertToJSON(localBooks);
     await uploadBooks(jsonData);
 
-    print('Synchronization completed successfully.');
   } catch (e) {
-    print('Error synchronizing with Firebase: $e');
+    //
   }
 }
 
@@ -142,9 +135,8 @@ Future<void> downloadDataToLocalDatabase() async {
       }
     });
 
-    print('Data downloaded and stored in the local database successfully.');
   } catch (e) {
-    print('Error downloading data to the local database: $e');
+    //
   }
 }
 
@@ -159,7 +151,6 @@ Future<File?> downloadImageFromStorage(String imageURL) async {
     await file.writeAsBytes(bytes!);
     return file;
   } catch (e) {
-    print('Error downloading image: $e');
     return null;
   }
 }
@@ -190,7 +181,6 @@ Future<List<Book>> getBooksFromFirestore() async {
 
     return books;
   } catch (e) {
-    print('Error getting books from Firestore: $e');
     return [];
   }
 }

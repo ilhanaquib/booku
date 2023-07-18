@@ -3,7 +3,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:booku/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:booku/themes/themes.dart';
-import 'package:flutter/foundation.dart';
 
 class Paywall extends StatefulWidget {
   const Paywall({Key? key, required this.offer, required this.selectedIndex})

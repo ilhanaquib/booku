@@ -1,6 +1,3 @@
-import 'package:flutter/widgets.dart';
-import 'dart:io';
-
 enum Category { career, education, hobby, cook }
 
 // ---------------this section is for database-------------------------------------

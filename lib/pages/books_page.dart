@@ -1,4 +1,3 @@
-import 'package:booku/data_selection.dart';
 import 'package:booku/databases/firebase_helper.dart';
 import 'package:booku/pages/books_list.dart';
 import 'package:flutter/material.dart';
@@ -82,15 +81,6 @@ class _BooksState extends State<Books> {
     );
   }
 
-  void _openDataSelect() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DataSelection(),
-      ),
-    );
-  }
-
   void _startUploadProcess() {
     setState(() {
       _uploadInProgress = true;
@@ -161,7 +151,7 @@ class _BooksState extends State<Books> {
             ),
             ListTile(
               title: const Text('Data management'),
-              trailing: Icon(Icons.arrow_drop_down),
+              trailing: const Icon(Icons.arrow_drop_down),
               onTap: () {
                 // Handle the tap to open/close the dropdown
                 setState(() {
