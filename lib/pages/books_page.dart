@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:booku/models/books_model.dart';
 import 'package:booku/databases/database_helper.dart';
 import 'edit_book.dart';
@@ -8,9 +10,8 @@ import 'package:booku/pages/books_list.dart';
 import 'package:booku/databases/firebase_helper.dart';
 
 class Books extends StatefulWidget {
-  const Books({
-    Key? key,
-  }) : super(key: key);
+  const Books({Key? key,}) : super(key: key);
+
 
   @override
   State<Books> createState() => _BooksState();
@@ -21,11 +22,17 @@ class _BooksState extends State<Books> {
   bool _dataManagementDropdownOpen = false;
   bool _uploadInProgress = false;
   bool _downloadInProgress = false;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
     displayData();
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      setState(() {
+        _isLoggedIn = user != null;
+      });
+    });
   }
 
   // dummy data
@@ -83,25 +90,51 @@ class _BooksState extends State<Books> {
   }
 
   void _startUploadProcess() {
-    setState(() {
-      _uploadInProgress = true;
-    });
-    synchronizeWithFirebase().then((_) {
+    if (_isLoggedIn) {
       setState(() {
-        _uploadInProgress = false;
+        _uploadInProgress = true;
       });
-    });
+      synchronizeWithFirebase().then((_) {
+        setState(() {
+          _uploadInProgress = false;
+        });
+      });
+    } else {
+      Navigator.pushNamed(context, '/login').then((value) {
+        if (value == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Log in to use this feature'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      });
+    }
   }
 
   void _startDownloadProcess() {
-    setState(() {
-      _downloadInProgress = true;
-    });
-    downloadDataToLocalDatabase().then((_) {
+    if (_isLoggedIn) {
       setState(() {
-        _downloadInProgress = false;
+        _downloadInProgress = true;
       });
-    });
+      downloadDataToLocalDatabase().then((_) {
+        setState(() {
+          _downloadInProgress = false;
+        });
+      });
+    } else {
+      Navigator.pushNamed(context, '/login').then((value) {
+        if (value == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Log in to use this feature'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -145,6 +178,30 @@ class _BooksState extends State<Books> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Show a loading indicator or any other UI while waiting for auth state
+                  return CircularProgressIndicator();
+                }
+
+                final user = snapshot.data;
+                final bool isLoggedIn = user != null;
+
+                return ListTile(
+                  title: Text(isLoggedIn ? 'Profile' : 'Login / Signup'),
+                  onTap: isLoggedIn
+                      ? () {
+                          // Handle logout here
+                          Navigator.pushNamed(context, '/account');
+                        }
+                      : () {
+                          Navigator.pushNamed(context, '/login');
+                        },
+                );
+              },
             ),
             ListTile(
               title: const Text('Themes'),
