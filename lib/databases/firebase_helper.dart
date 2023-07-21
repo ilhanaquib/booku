@@ -8,35 +8,40 @@ import 'package:sqflite/sqflite.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:booku/models/books_model.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
 Future<void> uploadBooks(String jsonData) async {
   try {
-    final List<dynamic> books = jsonDecode(jsonData);
-    final collectionRef = _firestore.collection('books');
+    if (userId != null) {
+      final List<dynamic> books = jsonDecode(jsonData);
+      final collectionRef =
+          _firestore.collection('UserData').doc(userId).collection('books');
 
-    for (var book in books) {
-      final documentId = book['_id'];
+      for (var book in books) {
+        final documentId = book['_id'];
 
-      // Check if the book has an image path
-      if (book['_image'] != null && book['_image'] is String) {
-        // Upload the image file to Firebase Storage
-        final imagePath = book['_image'];
-        final imageName = documentId;
-        final imageFile = File(imagePath);
-        final imageURL = await uploadImageToStorage(imageFile, imageName);
+        // Check if the book has an image path
+        if (book['_image'] != null && book['_image'] is String) {
+          // Upload the image file to Firebase Storage
+          final imagePath = book['_image'];
+          final imageName = documentId;
+          final imageFile = File(imagePath);
+          final imageURL = await uploadImageToStorage(imageFile, imageName);
 
-        if (imageURL != null) {
-          // Store the image download URL in the book document
-          book['_imageURL'] = imageURL;
+          if (imageURL != null) {
+            // Store the image download URL in the book document
+            book['_imageURL'] = imageURL;
+          }
         }
-      }
 
-      final documentRef = collectionRef.doc(documentId);
-      await documentRef.set(book, SetOptions(merge: true));
+        final documentRef = collectionRef.doc(documentId);
+        await documentRef.set(book, SetOptions(merge: true));
+      }
     }
   } catch (e) {
     //
@@ -107,52 +112,56 @@ Future<void> synchronizeWithFirebase() async {
 
 Future<void> downloadDataToLocalDatabase() async {
   try {
-    final collectionRef = _firestore.collection('books');
-    final QuerySnapshot snapshot = await collectionRef.get();
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final collectionRef =
+          _firestore.collection('UserData').doc(user.uid).collection('books');
+      final QuerySnapshot snapshot = await collectionRef.get();
 
-    final List<Map<String, dynamic>> downloadedData = [];
+      final List<Map<String, dynamic>> downloadedData = [];
 
-    for (var doc in snapshot.docs) {
-      final data = doc.data() as Map<String, dynamic>;
-      final imageURL = data['_imageURL'];
+      for (var doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+        final imageURL = data['imageURL']; // Change from data['_imageURL'];
 
-      // Download the image file from Firebase Storage and get its local path
-      if (imageURL != null && imageURL is String) {
-        final imageFile = await downloadImageFromStorage(imageURL);
-        if (imageFile != null) {
-          data['image'] = imageFile.path;
+        // Download the image file from Firebase Storage and get its local path
+        if (imageURL != null && imageURL is String) {
+          final imageFile = await downloadImageFromStorage(imageURL);
+          if (imageFile != null) {
+            data['image'] = imageFile.path;
+          }
         }
+
+        downloadedData.add(data);
       }
 
-      downloadedData.add(data);
+      final Database db = await openDatabase('books.db');
+      await db.transaction((txn) async {
+        final List<Map<String, dynamic>> existingData =
+            await txn.query('books'); // Fetch existing local data
+        final Set<String> existingIds =
+            existingData.map((data) => data[BookFields.id] as String).toSet();
+
+        // Filter out downloaded data that already exists locally
+        final List<Map<String, dynamic>> filteredData = downloadedData
+            .where((data) => !existingIds.contains(data[BookFields.id]))
+            .toList();
+
+        // Merge filtered data with existing data
+        final List<Map<String, dynamic>> mergedData = [
+          ...existingData,
+          ...filteredData,
+        ];
+
+        // Delete existing data in the local database
+        await txn.delete('books');
+
+        // Insert merged data into the local database
+        for (var data in mergedData) {
+          await txn.insert('books', data);
+        }
+      });
     }
-
-    final Database db = await openDatabase('books.db');
-    await db.transaction((txn) async {
-      final List<Map<String, dynamic>> existingData =
-          await txn.query('books'); // Fetch existing local data
-      final Set<String> existingIds =
-          existingData.map((data) => data[BookFields.id] as String).toSet();
-
-      // Filter out downloaded data that already exists locally
-      final List<Map<String, dynamic>> filteredData = downloadedData
-          .where((data) => !existingIds.contains(data[BookFields.id]))
-          .toList();
-
-      // Merge filtered data with existing data
-      final List<Map<String, dynamic>> mergedData = [
-        ...existingData,
-        ...filteredData,
-      ];
-
-      // Delete existing data in the local database
-      await txn.delete('books');
-
-      // Insert merged data into the local database
-      for (var data in mergedData) {
-        await txn.insert('books', data);
-      }
-    });
   } catch (e) {
     //
   }
@@ -175,29 +184,36 @@ Future<File?> downloadImageFromStorage(String imageURL) async {
 
 Future<List<Book>> getBooksFromFirestore() async {
   try {
-    final QuerySnapshot snapshot = await _firestore.collection('books').get();
-    final List<QueryDocumentSnapshot> bookDocs = snapshot.docs;
-    final List<Book> books = [];
+    if (userId != null) {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('UserData')
+          .doc(userId)
+          .collection('books')
+          .get();
+      final List<QueryDocumentSnapshot> bookDocs = snapshot.docs;
+      final List<Book> books = [];
 
-    for (var doc in bookDocs) {
-      final data = doc.data() as Map<String, dynamic>;
-      final imageUrl = data['_imageURL']
-          as String?; // Assuming you have 'imageURL' field in Firestore
+      for (var doc in bookDocs) {
+        final data = doc.data() as Map<String, dynamic>;
+        final imageUrl = data['_imageURL'] as String?;
 
-      final book = Book(
-        id: data[BookFields.id] as String,
-        title: data[BookFields.title] as String,
-        author: data[BookFields.author] as String,
-        image: data[BookFields.image] as String,
-        dateAdded: DateTime.parse(data[BookFields.date] as String),
-        category:
-            Category.values[int.parse(data[BookFields.category] as String)],
-        imageUrl: imageUrl ?? '',
-      );
-      books.add(book);
+        final book = Book(
+          id: data[BookFields.id] as String,
+          title: data[BookFields.title] as String,
+          author: data[BookFields.author] as String,
+          image: data[BookFields.image] as String,
+          dateAdded: DateTime.parse(data[BookFields.date] as String),
+          category:
+              Category.values[int.parse(data[BookFields.category] as String)],
+          imageUrl: imageUrl ?? '',
+        );
+        books.add(book);
+      }
+
+      return books;
     }
 
-    return books;
+    return [];
   } catch (e) {
     return [];
   }

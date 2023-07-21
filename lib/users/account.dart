@@ -1,7 +1,8 @@
-import 'package:booku/payment/purchases.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:booku/databases/database_helper.dart';
 
 class UserAccount extends StatefulWidget {
   const UserAccount({super.key});
@@ -31,7 +32,10 @@ class _UserAccountState extends State<UserAccount> {
   }
 
   Future<void> userSignOut() async {
+    DatabaseHelper db = DatabaseHelper.instance;
+    String tablename = 'books';
     FirebaseAuth.instance.signOut();
+    db.deleteAllDataFromTable(tablename);
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 

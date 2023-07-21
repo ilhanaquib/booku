@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:booku/payment/purchases.dart';
+import 'package:booku/databases/firebase_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -54,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       getUsersDetail();
       PurchaseApi.setAppUserId(_appUserId!);
+      downloadDataToLocalDatabase();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Successfully logged In'),

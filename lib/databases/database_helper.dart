@@ -179,6 +179,15 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> deleteAllDataFromTable(String tableName) async {
+  try {
+    final db = await instance.database;
+    await db.delete(tableBook);
+  } catch (e) {
+    print('Error deleting data from table: $e');
+  }
+}
+
   Future close() async {
     final db = await instance.database;
 

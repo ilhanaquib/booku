@@ -10,8 +10,9 @@ import 'package:booku/pages/books_list.dart';
 import 'package:booku/databases/firebase_helper.dart';
 
 class Books extends StatefulWidget {
-  const Books({Key? key,}) : super(key: key);
-
+  const Books({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Books> createState() => _BooksState();
@@ -19,6 +20,8 @@ class Books extends StatefulWidget {
 
 class _BooksState extends State<Books> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? userId;
   bool _dataManagementDropdownOpen = false;
   bool _uploadInProgress = false;
   bool _downloadInProgress = false;
@@ -114,7 +117,10 @@ class _BooksState extends State<Books> {
   }
 
   void _startDownloadProcess() {
-    if (_isLoggedIn) {
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      // User is logged in, set the userId variable
+      userId = user.uid;
       setState(() {
         _downloadInProgress = true;
       });
@@ -124,6 +130,7 @@ class _BooksState extends State<Books> {
         });
       });
     } else {
+      // User is not logged in, navigate to the login page
       Navigator.pushNamed(context, '/login').then((value) {
         if (value == true) {
           ScaffoldMessenger.of(context).showSnackBar(
