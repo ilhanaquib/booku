@@ -1,7 +1,10 @@
+import 'package:booku/themes/themes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:purchases_flutter/purchases_flutter.dart';
+
+import 'package:booku/themes/theme_provider.dart';
 
 class PurchaseApi {
   static const _apiKey = 'goog_YnBHrKHEtGrJvUzPFqxKMyoIPmd';
@@ -29,6 +32,22 @@ class PurchaseApi {
         print(e);
       }
       return [];
+    }
+  }
+
+  static Future<void> restorePurchases() async {
+    try {
+     final restoredInfo =  await Purchases.restorePurchases();
+     final entitlementInfo = await Purchases.getCustomerInfo();
+
+     if(restoredInfo.entitlements.active.containsKey(entitlementInfo.entitlements.active)){
+
+        ThemeProvider().addPurchasedTheme(purpleTheme);
+     } 
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

@@ -47,15 +47,49 @@ class _EditBookState extends State<EditBook> {
 
   Future<void> pickImage() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-      final imagePath = image.path;
-      setState(() {
-        _pickedImage = imagePath;
-      });
+      // Show the modal bottom sheet with options
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.camera),
+                  title: Text('Camera'),
+                  onTap: () {
+                    Navigator.pop(context); // Close the bottom sheet
+                    _getImage(ImageSource
+                        .camera); // Call _getImage with ImageSource.camera
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.photo_library),
+                  title: Text('Gallery'),
+                  onTap: () {
+                    Navigator.pop(context); // Close the bottom sheet
+                    _getImage(ImageSource
+                        .gallery); // Call _getImage with ImageSource.gallery
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
     } catch (e) {
       Text(e.toString());
     }
+  }
+
+  Future<void> _getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return;
+    final imagePath = image.path;
+    setState(() {
+      _pickedImage = imagePath;
+    });
   }
 
   void _submitBookData() async {

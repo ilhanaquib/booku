@@ -1,3 +1,4 @@
+import 'package:booku/payment/purchases.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -260,6 +261,12 @@ class _BooksState extends State<Books> {
                   ),
                 ],
               ),
+              ListTile(
+                title: const Text('Restore Purchases', style: TextStyle(fontWeight: FontWeight.bold),),
+                onTap: () {
+                  PurchaseApi.restorePurchases();
+                },
+              )
           ],
         ),
       ),
