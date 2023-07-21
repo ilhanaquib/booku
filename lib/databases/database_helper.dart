@@ -184,7 +184,7 @@ class DatabaseHelper {
     final db = await instance.database;
     await db.delete(tableBook);
   } catch (e) {
-    print('Error deleting data from table: $e');
+    //
   }
 }
 

@@ -45,15 +45,44 @@ class _UserAccountState extends State<UserAccount> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Column(
-        children: [
-          Text('User id (UID) : $userId'),
-          Text('Email : $email'),
-          ElevatedButton(
-            onPressed: userSignOut,
-            child: const Text('Log Out'),
-          )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('User id (UID)', style: TextStyle(fontWeight: FontWeight.bold),),
+                    const Divider(),
+                    Text(userId!),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Email', style: TextStyle(fontWeight: FontWeight.bold),),
+                    const Divider(),
+                    Text(email!)
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30,),
+            ElevatedButton(
+              onPressed: userSignOut,
+              child: const Text('Log Out'),
+            )
+          ],
+        ),
       ),
     );
   }

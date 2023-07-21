@@ -11,7 +11,6 @@ class PurchaseApi {
     await Purchases.setLogLevel(LogLevel.debug);
     await Purchases.configure(
         PurchasesConfiguration(_apiKey)..appUserID = _appUserId);
-    print(_appUserId);
   }
 
   static void setAppUserId(String appUserId) {

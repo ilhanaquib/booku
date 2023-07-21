@@ -191,7 +191,7 @@ class _BooksState extends State<Books> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // Show a loading indicator or any other UI while waiting for auth state
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
 
                 final user = snapshot.data;

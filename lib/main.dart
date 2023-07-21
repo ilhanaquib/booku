@@ -63,13 +63,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/home': (context) =>  Books(),
+        '/home': (context) =>  const Books(),
         '/login': (context) => StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // Return a loading indicator or any other UI while waiting for auth state
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
 
                 final user = snapshot.data;
@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
                   return Container();
                 } else {
                   // User is not logged in, show the LoginPage
-                  return LoginPage();
+                  return const LoginPage();
                 }
               },
             ),

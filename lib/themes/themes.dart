@@ -28,6 +28,7 @@ final defaultTheme = ThemeData().copyWith(
   drawerTheme: const DrawerThemeData()
       .copyWith(backgroundColor: kColorScheme1.background),
   textTheme: GoogleFonts.poppinsTextTheme(),
+  dividerTheme: const DividerThemeData().copyWith(color: kColorScheme1.onBackground)
 );
 
 final purpleTheme = ThemeData().copyWith(
@@ -45,6 +46,8 @@ final purpleTheme = ThemeData().copyWith(
   drawerTheme: const DrawerThemeData()
       .copyWith(backgroundColor: kColorScheme2.background),
   textTheme: GoogleFonts.poppinsTextTheme(),
+    dividerTheme: const DividerThemeData().copyWith(color: kColorScheme2.onBackground)
+
 );
 
 final tealTheme = ThemeData().copyWith(
@@ -62,6 +65,8 @@ final tealTheme = ThemeData().copyWith(
   drawerTheme: const DrawerThemeData()
       .copyWith(backgroundColor: kColorScheme3.background),
   textTheme: GoogleFonts.poppinsTextTheme(),
+    dividerTheme: const DividerThemeData().copyWith(color: kColorScheme3.onBackground)
+
 );
 
 final orangeTheme = ThemeData().copyWith(
@@ -79,6 +84,7 @@ final orangeTheme = ThemeData().copyWith(
   drawerTheme: const DrawerThemeData()
       .copyWith(backgroundColor: kColorScheme4.background),
   textTheme: GoogleFonts.poppinsTextTheme(),
+  dividerTheme: const DividerThemeData().copyWith(color: kColorScheme4.onBackground)
 );
 
 final greenTheme = ThemeData().copyWith(
@@ -96,6 +102,7 @@ final greenTheme = ThemeData().copyWith(
   drawerTheme: const DrawerThemeData()
       .copyWith(backgroundColor: kColorScheme5.background),
   textTheme: GoogleFonts.poppinsTextTheme(),
+  dividerTheme: const DividerThemeData().copyWith(color: kColorScheme5.onBackground)
 );
 
 final List<ThemeData> allThemes = [
